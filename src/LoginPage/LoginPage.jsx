@@ -2,14 +2,15 @@ import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import { authenticationService } from '@/_services';
+import { login } from '../_services/rest/authService';
+import { storageService } from '../_services/storage/storageService';
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
         // redirect to home if already logged in
-        if (authenticationService.currentUserValue) { 
+        if (storageService.currentUserValue) { 
             this.props.history.push('/');
         }
     }
@@ -17,10 +18,6 @@ class LoginPage extends React.Component {
     render() {
         return (
             <div>
-                <div className="alert alert-info">
-                    Username: test<br />
-                    Password: test
-                </div>
                 <h2>Login</h2>
                 <Formik
                     initialValues={{
@@ -33,17 +30,15 @@ class LoginPage extends React.Component {
                     })}
                     onSubmit={({ username, password }, { setStatus, setSubmitting }) => {
                         setStatus();
-                        authenticationService.login(username, password)
-                            .then(
-                                user => {
-                                    const { from } = this.props.location.state || { from: { pathname: "/" } };
-                                    this.props.history.push(from);
-                                },
-                                error => {
-                                    setSubmitting(false);
-                                    setStatus(error);
-                                }
-                            );
+                        login(username,password,(response)=>{
+                            storageService.saveUser(response)                
+                            const { from } = this.props.location.state || { from: { pathname: "/" } };
+                            this.props.history.push(from);
+                        },(error)=>{
+                            setSubmitting(false);
+                            setStatus(error);
+                        })
+        
                     }}
                     render={({ errors, status, touched, isSubmitting }) => (
                         <Form>

@@ -2,10 +2,11 @@ import React from 'react';
 import { Router, Route, Link } from 'react-router-dom';
 
 import { history } from '@/_helpers';
-import { authenticationService } from '@/_services';
 import { PrivateRoute } from '@/_components';
 import { HomePage } from '@/HomePage';
 import { LoginPage } from '@/LoginPage';
+import { AddCustomerPage } from '../AddCustomerPage';
+import { storageService } from '../_services/storage/storageService';
 
 class App extends React.Component {
     constructor(props) {
@@ -17,11 +18,11 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        authenticationService.currentUser.subscribe(x => this.setState({ currentUser: x }));
+        storageService.user.subscribe(x => this.setState({ currentUser: x }));
     }
 
     logout() {
-        authenticationService.logout();
+        storageService.logout();
         history.push('/login');
     }
 
@@ -33,8 +34,9 @@ class App extends React.Component {
                     {currentUser &&
                         <nav className="navbar navbar-expand navbar-dark bg-dark">
                             <div className="navbar-nav">
-                                <Link to="/" className="nav-item nav-link">Home</Link>
-                                <a onClick={this.logout} className="nav-item nav-link">Logout</a>
+                                <Link to="/" className="nav-item nav-link">Anasayfa</Link>
+                                <Link to="/addCustomer" className="nav-item nav-link">Müşteri Ekle</Link>
+                                <a onClick={this.logout} className="nav-item nav-link">Çıkış</a>
                             </div>
                         </nav>
                     }
@@ -44,6 +46,7 @@ class App extends React.Component {
                                 <div className="col-md-6 offset-md-3">
                                     <PrivateRoute exact path="/" component={HomePage} />
                                     <Route path="/login" component={LoginPage} />
+                                    <Route path="/addCustomer" component={AddCustomerPage} />
                                 </div>
                             </div>
                         </div>

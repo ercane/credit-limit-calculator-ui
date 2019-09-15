@@ -1,11 +1,19 @@
-import { authenticationService } from '@/_services';
+import { storageService } from '../_services/storage/storageService';
 
 export function authHeader() {
     // return authorization header with jwt token
-    const currentUser = authenticationService.currentUserValue;
+    let headers;
+    const currentUser = storageService.userValue;
     if (currentUser && currentUser.token) {
-        return { Authorization: `Bearer ${currentUser.token}` };
+        headers = {
+            'Authorization': 'Bearer ' + currentUser.token,
+            'Content-Type': 'application/json'
+        };
     } else {
-        return {};
+        headers = {
+            'Content-Type': 'application/json'
+        };
     }
+
+    return headers;
 }
