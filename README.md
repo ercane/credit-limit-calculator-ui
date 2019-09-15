@@ -1,5 +1,11 @@
-# react-jwt-authentication-example
+# credit-limit-calculator-ui
 
-React (without Redux) - JWT Authentication Tutorial & Example
+First npm install
+After npm start
 
-To see a demo and further details go to http://jasonwatmore.com/post/2019/04/06/react-jwt-authentication-tutorial-example
+This ui will be serve from port 8080. 
+Backend repo is here: https://github.com/ercane/credit-limit-calculator
+
+Server address can be changed from webpack.config.js file.
+
+
